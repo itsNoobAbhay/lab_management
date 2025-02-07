@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Timetable</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+        body {
+            background-color: #f4f4f4;
+            text-align: center;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin: auto;
+        }
+        h2 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: center;
+        }
+        th {
+            background-color: #4CAF50;
+            color: white;
+        }
+        button {
+            margin-top: 15px;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        .back-btn {
+            background-color: #3498db;
+            color: white;
+        }
+        .clear-btn {
+            background-color: #e74c3c;
+            color: white;
+        }
+        button:hover {
+            opacity: 0.8;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>Today's Timetable</h2>
+        
+        <table id="timetable">
+            <thead>
+                <tr>
+                    <th>Time Slot</th>
+                    <th>Teacher</th>
+                    <th>Branch</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Timetable data will be inserted here -->
+            </tbody>
+        </table>
+
+        <button class="back-btn" onclick="window.location.href='root.html'">Go Back</button>
+    </div>
+
+    <script>
+        function loadTimetable() {
+            let timetable = JSON.parse(localStorage.getItem("timetable")) || [];
+            let tableBody = document.querySelector("#timetable tbody");
+            tableBody.innerHTML = "";
+
+            if (timetable.length === 0) {
+                tableBody.innerHTML = "<tr><td colspan='3'>No lectures scheduled yet.</td></tr>";
+            } else {
+                timetable.forEach((lecture, index) => {
+                    let row = `<tr>
+                        <td>${lecture.time}</td>
+                        <td>${lecture.teacher}</td>
+                        <td>${lecture.branch}</td>
+                    </tr>`;
+                    tableBody.innerHTML += row;
+                });
+            }
+        }
+
+        loadTimetable();
+    </script>
+
+</body>
+</html>
