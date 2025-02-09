@@ -272,22 +272,43 @@
         }
 
         function addLecture() {
-            let time = document.getElementById("time").value;
-            let teacher = document.getElementById("teacher").value;
-            let branch = document.getElementById("branch").value;
+            const time = document.getElementById('time').value;
+            const teacher = document.getElementById('teacher').value;
+            const branch = document.getElementById('branch').value;
 
-            let lecture = { time, teacher, branch };
+            const lectureData = {
+                time : time,
+                teacher : teacher,
+                branch : branch
+            };
 
-            let lectures = JSON.parse(localStorage.getItem("timetable")) || [];
-            lectures.push(lecture);
-            localStorage.setItem("timetable", JSON.stringify(lectures));
-
-            alert("Lecture added successfully!");
+            fetch('/add-lecture', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(lectureData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.message) {
+                    alert("Lecture Added Successfully!");
+                } else {
+                    alert("Error: " + data.error);
+                }
+            })
+            .catch(error => console.error("Error:", error));
         }
 
         function clearTimetable() {
-            localStorage.removeItem("timetable");
-            alert("Timetable cleared!");
+            fetch('/clear-timetable', { method: 'DELETE' })
+            .then(response => response.json())
+            .then(data => {
+                if (data.message) {
+                    alert("Timetable Cleared!");
+                } else {
+                    alert("Error: " + data.error);
+                }
+            })
+            .catch(error => console.error("Error:", error));
         }
     </script>
 

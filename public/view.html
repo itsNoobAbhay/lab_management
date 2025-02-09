@@ -63,6 +63,7 @@
         }
     </style>
 </head>
+
 <body>
 
     <div class="container">
@@ -85,26 +86,31 @@
     </div>
 
     <script>
-        function loadTimetable() {
-            let timetable = JSON.parse(localStorage.getItem("timetable")) || [];
-            let tableBody = document.querySelector("#timetable tbody");
-            tableBody.innerHTML = "";
+        async function fetchTimetable() {
+            try {
+                const response = await fetch('/get-timetable');
+                const data = await response.json();
+                
+                const tbody = document.querySelector("#timetable tbody");
+                tbody.innerHTML = ""; // Clear previous data
 
-            if (timetable.length === 0) {
-                tableBody.innerHTML = "<tr><td colspan='3'>No lectures scheduled yet.</td></tr>";
-            } else {
-                timetable.forEach((lecture, index) => {
-                    let row = `<tr>
+                data.forEach(lecture => {
+                    const row = document.createElement("tr");
+                    row.innerHTML = `
                         <td>${lecture.time}</td>
                         <td>${lecture.teacher}</td>
                         <td>${lecture.branch}</td>
-                    </tr>`;
-                    tableBody.innerHTML += row;
+                    `;
+                    tbody.appendChild(row);
                 });
+
+            } catch (error) {
+                console.error("Error fetching timetable:", error);
             }
         }
 
-        loadTimetable();
+        // Fetch timetable data when the page loads
+        window.onload = fetchTimetable;
     </script>
 
 </body>
