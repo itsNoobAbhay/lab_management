@@ -272,44 +272,42 @@
         }
 
         function addLecture() {
-            const time = document.getElementById('time').value;
-            const teacher = document.getElementById('teacher').value;
-            const branch = document.getElementById('branch').value;
+        const time = document.getElementById('time').value;
+        const teacher = document.getElementById('teacher').value;
+        const branch = document.getElementById('branch').value;
 
-            const lectureData = {
-                time : time,
-                teacher : teacher,
-                branch : branch
-            };
+        const lectureData = { time, teacher, branch };
 
-            fetch('/add-lecture', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(lectureData)
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.message) {
-                    alert("Lecture Added Successfully!");
-                } else {
-                    alert("Error: " + data.error);
-                }
-            })
-            .catch(error => console.error("Error:", error));
-        }
+        fetch('/add-lecture', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(lectureData)
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.message) {
+                alert("Lecture Added Successfully!");
+                fetchTimetable(); // Refresh the timetable after adding
+            } else {
+                alert("Error: " + data.error);
+            }
+        })
+        .catch(error => console.error("Error:", error));
+    }
 
-        function clearTimetable() {
-            fetch('/clear-timetable', { method: 'DELETE' })
-            .then(response => response.json())
-            .then(data => {
-                if (data.message) {
-                    alert("Timetable Cleared!");
-                } else {
-                    alert("Error: " + data.error);
-                }
-            })
-            .catch(error => console.error("Error:", error));
-        }
+    function clearTimetable() {
+        fetch('/clear-timetable', { method: 'DELETE' })
+        .then(response => response.json())
+        .then(data => {
+            if (data.message) {
+                alert("Timetable Cleared!");
+                fetchTimetable(); // Refresh the timetable after clearing
+            } else {
+                alert("Error: " + data.error);
+            }
+        })
+        .catch(error => console.error("Error:", error));
+    }
     </script>
 
 </body>
