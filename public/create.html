@@ -1,117 +1,4 @@
-<!-- <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Timetable Management</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: Arial, sans-serif;
-        }
-        body {
-            background-color: #f4f4f4;
-            text-align: center;
-            padding: 20px;
-        }
-        .container {
-            max-width: 600px;
-            background: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            margin: auto;
-        }
-        h2 {
-            color: #333;
-            margin-bottom: 20px;
-        }
-        label {
-            font-weight: bold;
-            display: block;
-            margin: 10px 0 5px;
-        }
-        select, button {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 15px;
-            border-radius: 5px;
-            border: 1px solid #ccc;
-            font-size: 16px;
-        }
-        button {
-            background-color: #4CAF50;
-            color: white;
-            cursor: pointer;
-            border: none;
-        }
-        button:hover {
-            background-color: #45a049;
-        }
-    </style>
-</head>
-<body>
 
-    <div class="container">
-        <h2>Schedule a Lecture</h2>
-        
-        <label for="time">Select Time Slot:</label>
-        <select id="time">
-            <option value="10:30 - 12:30">10:30 - 12:30</option>
-            <option value="12:40 - 2:00">12:40 - 2:00</option>
-            <option value="2:00 - 4:10">2:00 - 4:10</option>
-            <option value="4:10 - 6:00">4:10 - 6:00</option>
-        </select>
-
-        <label for="teacher">Select Teacher:</label>
-        <select id="teacher">
-            <option value="Mr. Sharma">Jyotika madam</option>
-            <option value="Ms. Gupta">Priti madam</option>
-            <option value="Dr. Patel">Vishal sir</option>
-            <option value="Mrs. Roy">Hiren sir</option>
-            <option value="Mr. Singh">Siddhesh sir</option>
-        </select>
-
-        <label for="branch">Select Branch:</label>
-        <select id="branch">
-            <option value="IT">IT</option>
-            <option value="CS">CS</option>
-            <option value="DS">DS</option>
-            <option value="BCA">BCA</option>
-        </select>
-
-        <button onclick="addLecture()">Add Lecture</button>
-        <button onclick="window.location.href='view.html'">View Timetable</button>
-        <button class="clear-btn" onclick="clearTimetable()" style="background-color: #e74c3c; color: white; padding: 10px 15px; border: none; border-radius: 5px; font-size: 16px; cursor: pointer;">Clear Timetable</button>
-
-    </div>
-
-    <script>
-        function addLecture() {
-            let time = document.getElementById("time").value;
-            let teacher = document.getElementById("teacher").value;
-            let branch = document.getElementById("branch").value;
-
-            let lecture = { time, teacher, branch };
-
-            let lectures = JSON.parse(localStorage.getItem("timetable")) || [];
-            lectures.push(lecture);
-            localStorage.setItem("timetable", JSON.stringify(lectures));
-
-            alert("Lecture added successfully!");
-        }
-
-        function clearTimetable() {
-        localStorage.removeItem("timetable");
-        alert("Timetable cleared!");
-    }
-
-    </script>
-
-</body>
-</html> -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -272,42 +159,23 @@
         }
 
         function addLecture() {
-        const time = document.getElementById('time').value;
-        const teacher = document.getElementById('teacher').value;
-        const branch = document.getElementById('branch').value;
+            let time = document.getElementById("time").value;
+            let teacher = document.getElementById("teacher").value;
+            let branch = document.getElementById("branch").value;
 
-        const lectureData = { time, teacher, branch };
+            let lecture = { time, teacher, branch };
 
-        fetch('/add-lecture', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(lectureData)
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.message) {
-                alert("Lecture Added Successfully!");
-                fetchTimetable(); // Refresh the timetable after adding
-            } else {
-                alert("Error: " + data.error);
-            }
-        })
-        .catch(error => console.error("Error:", error));
-    }
+            let lectures = JSON.parse(localStorage.getItem("timetable")) || [];
+            lectures.push(lecture);
+            localStorage.setItem("timetable", JSON.stringify(lectures));
 
-    function clearTimetable() {
-        fetch('/clear-timetable', { method: 'DELETE' })
-        .then(response => response.json())
-        .then(data => {
-            if (data.message) {
-                alert("Timetable Cleared!");
-                fetchTimetable(); // Refresh the timetable after clearing
-            } else {
-                alert("Error: " + data.error);
-            }
-        })
-        .catch(error => console.error("Error:", error));
-    }
+            alert("Lecture added successfully!");
+        }
+
+        function clearTimetable() {
+            localStorage.removeItem("timetable");
+            alert("Timetable cleared!");
+        }
     </script>
 
 </body>
