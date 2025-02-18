@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Computer Lab Issue Tracker</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        h2 {
+            text-align: center;
+            color: #333;
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        label {
+            font-weight: bold;
+            display: block;
+            margin-top: 10px;
+        }
+        input, select, textarea {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            width: 100%;
+            background: #28a745;
+            color: white;
+            padding: 10px;
+            margin-top: 10px;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        button:hover {
+            background: #218838;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            padding: 10px;
+            border: 1px solid #ccc;
+            text-align: center;
+        }
+        th {
+            background: #007bff;
+            color: white;
+        }
+        .pending {
+            color: red;
+            font-weight: bold;
+        }
+        .resolved {
+            color: green;
+            font-weight: bold;
+        }
+        .remove-btn {
+            background: red;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        .remove-btn:hover {
+            background: darkred;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>Computer Lab Issue Tracker</h2>
+
+    <div class="container">
+        <h3>Report an Issue</h3>
+        <form id="issueForm">
+            <label for="computer">Computer Number:</label>
+            <input type="text" id="computer" required>
+            
+            <label for="issue">Issue Type:</label>
+            <select id="issue" required>
+                <option value="Not Starting">Not Starting</option>
+                <option value="Slow Performance">Slow Performance</option>
+                <option value="Internet Issue">Internet Issue</option>
+                <option value="Other">Other</option>
+            </select>
+
+            <label for="details">Additional Details:</label>
+            <textarea id="details" rows="3"></textarea>
+
+            <button type="submit">Submit Issue</button>
+        </form>
+    </div>
+
+    <div class="container">
+        <h3>Reported Issues</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Computer No.</th>
+                    <th>Issue</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="issueTable">
+                <!-- Issues will be added here -->
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        document.getElementById("issueForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+
+            let computer = document.getElementById("computer").value;
+            let issue = document.getElementById("issue").value;
+            let details = document.getElementById("details").value;
+
+            let table = document.getElementById("issueTable");
+            let row = table.insertRow();
+            
+            row.innerHTML = `
+                <td>${computer}</td>
+                <td>${issue} ${details ? " - " + details : ""}</td>
+                <td class="pending">Pending</td>
+                <td><button class="remove-btn" onclick="removeIssue(this)">Remove</button></td>
+            `;
+
+            document.getElementById("issueForm").reset();
+        });
+
+        function removeIssue(button) {
+            let row = button.parentElement.parentElement;
+            row.remove();
+        }
+    </script>
+
+</body>
+</html>
