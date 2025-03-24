@@ -23,6 +23,7 @@
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             margin: auto;
+            margin-bottom: 20px;
         }
         h2 {
             color: #333;
@@ -42,7 +43,9 @@
             background-color: #4CAF50;
             color: white;
         }
-        button {
+        .back-btn {
+            background-color: #3498db;
+            color: white;
             margin-top: 15px;
             padding: 10px 15px;
             border: none;
@@ -50,61 +53,66 @@
             font-size: 16px;
             cursor: pointer;
         }
-        .back-btn {
-            background-color: #3498db;
-            color: white;
-        }
-        .clear-btn {
-            background-color: #e74c3c;
-            color: white;
-        }
-        button:hover {
+        .back-btn:hover {
             opacity: 0.8;
         }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <h2>Today's Timetable</h2>
-        
-        <table id="timetable">
-            <thead>
-                <tr>
-                    <th>Time Slot</th>
-                    <th>Teacher</th>
-                    <th>Branch</th>
-                </tr>
-            </thead>
-            <tbody>
-                <!-- Timetable data will be inserted here -->
-            </tbody>
-        </table>
+    <h2>Today's Timetable</h2>
 
-        <button class="back-btn" onclick="window.location.href='root.html'">Go Back</button>
+    <div id="timetables">
+        <!-- Timetable tables will be inserted here -->
     </div>
 
-    <script>
-        function loadTimetable() {
-            let timetable = JSON.parse(localStorage.getItem("timetable")) || [];
-            let tableBody = document.querySelector("#timetable tbody");
-            tableBody.innerHTML = "";
+    <button class="back-btn" onclick="window.location.href='root.html'">Go Back</button>
 
-            if (timetable.length === 0) {
-                tableBody.innerHTML = "<tr><td colspan='3'>No lectures scheduled yet.</td></tr>";
-            } else {
-                timetable.forEach((lecture, index) => {
-                    let row = `<tr>
-                        <td>${lecture.time}</td>
-                        <td>${lecture.teacher}</td>
-                        <td>${lecture.branch}</td>
-                    </tr>`;
-                    tableBody.innerHTML += row;
-                });
-            }
+    <script>
+        function loadTimetables() {
+            const branches = ["CS", "IT", "CA"];
+            let timetablesContainer = document.getElementById("timetables");
+            timetablesContainer.innerHTML = "";
+
+            branches.forEach(branch => {
+                // Changed key format to match create.html
+                let timetable = JSON.parse(localStorage.getItem(`${branch}_timetable`)) || [];
+                
+                let tableHTML = `
+                    <div class="container">
+                        <h2>${branch} Timetable</h2>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Time Slot</th>
+                                    <th>Teacher</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                `;
+
+                if (timetable.length === 0) {
+                    tableHTML += `<tr><td colspan="2">No lectures scheduled yet.</td></tr>`;
+                } else {
+                    timetable.forEach(lecture => {
+                        tableHTML += `<tr>
+                            <td>${lecture.time}</td>
+                            <td>${lecture.teacher}</td>
+                        </tr>`;
+                    });
+                }
+
+                tableHTML += `
+                            </tbody>
+                        </table>
+                    </div>
+                `;
+
+                timetablesContainer.innerHTML += tableHTML;
+            });
         }
 
-        loadTimetable();
+        loadTimetables();
     </script>
 
 </body>

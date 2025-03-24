@@ -81,6 +81,22 @@
         .remove-btn:hover {
             background: darkred;
         }
+        .admin-controls {
+            margin-top: 15px;
+            text-align: center;
+        }
+        .admin-btn {
+            background: #e74c3c;
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+            width: 100%;
+        }
+        .admin-btn:hover {
+            background: #c0392b;
+        }
     </style>
 </head>
 <body>
@@ -116,13 +132,18 @@
                     <th>Computer No.</th>
                     <th>Issue</th>
                     <th>Status</th>
-                    <th>Action</th>
+                    
                 </tr>
             </thead>
             <tbody id="issueTable">
                 <!-- Issues will be added here -->
             </tbody>
         </table>
+    </div>
+
+    <div class="container admin-controls">
+        <h3>Admin Controls</h3>
+        <button class="admin-btn" onclick="confirmAdmin()">Cancel All Issues</button>
     </div>
 
     <script>
@@ -140,7 +161,7 @@
                 <td>${computer}</td>
                 <td>${issue} ${details ? " - " + details : ""}</td>
                 <td class="pending">Pending</td>
-                <td><button class="remove-btn" onclick="removeIssue(this)">Remove</button></td>
+                
             `;
 
             document.getElementById("issueForm").reset();
@@ -149,6 +170,16 @@
         function removeIssue(button) {
             let row = button.parentElement.parentElement;
             row.remove();
+        }
+
+        function confirmAdmin() {
+            let password = prompt("Enter admin password:");
+            if (password === "admin") {
+                document.getElementById("issueTable").innerHTML = "";
+                alert("All reported issues have been cleared.");
+            } else {
+                alert("Access Denied! Incorrect password.");
+            }
         }
     </script>
 
