@@ -1,119 +1,119 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>View Timetable</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: Arial, sans-serif;
-        }
-        body {
-            background-color: #f4f4f4;
-            text-align: center;
-            padding: 20px;
-        }
-        .container {
-            max-width: 800px;
-            background: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            margin: auto;
-            margin-bottom: 20px;
-        }
-        h2 {
-            color: #333;
-            margin-bottom: 20px;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
-        th, td {
-            border: 1px solid #ddd;
-            padding: 10px;
-            text-align: center;
-        }
-        th {
-            background-color: #4CAF50;
-            color: white;
-        }
-        .back-btn {
-            background-color: #3498db;
-            color: white;
-            margin-top: 15px;
-            padding: 10px 15px;
-            border: none;
-            border-radius: 5px;
-            font-size: 16px;
-            cursor: pointer;
-        }
-        .back-btn:hover {
-            opacity: 0.8;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <title>View Timetables</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    body {
+      font-family: "Segoe UI", sans-serif;
+      background: linear-gradient(to right, #f0f4ff, #d9e8fc);
+      margin: 0;
+      padding: 2rem;
+    }
+
+    h1 {
+      text-align: center;
+      font-size: 2.5rem;
+      margin-bottom: 2rem;
+      color: #333;
+    }
+
+    .container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 2rem;
+    }
+
+    .card {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+      padding: 1.5rem;
+      width: 90%;
+      max-width: 800px;
+      overflow-x: auto;
+    }
+
+    .card h2 {
+      text-align: center;
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+      color: #444;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 1rem;
+    }
+
+    th, td {
+      border: 1px solid #ddd;
+      padding: 0.6rem;
+      text-align: center;
+    }
+
+    th {
+      background-color: #f1f6ff;
+      font-weight: bold;
+    }
+
+    tr:nth-child(even) {
+      background-color: #f9f9f9;
+    }
+
+    .no-data {
+      text-align: center;
+      font-style: italic;
+      color: #888;
+    }
+  </style>
 </head>
 <body>
+  <h1>Department Timetables</h1>
+  <div class="container" id="container"></div>
 
-    <h2>Today's Timetable</h2>
+  <script>
+    const departments = ["CS", "IT", "DS"];
+    const container = document.getElementById("container");
 
-    <div id="timetables">
-        <!-- Timetable tables will be inserted here -->
-    </div>
+    window.onload = () => {
+      departments.forEach((dept) => {
+        const raw = localStorage.getItem(dept + "_timetable");
+        const card = document.createElement("div");
+        card.className = "card";
 
-    <button class="back-btn" onclick="window.location.href='root.html'">Go Back</button>
+        const title = document.createElement("h2");
+        title.textContent = dept + " Department";
+        card.appendChild(title);
 
-    <script>
-        function loadTimetables() {
-            const branches = ["CS", "IT", "CA"];
-            let timetablesContainer = document.getElementById("timetables");
-            timetablesContainer.innerHTML = "";
+        if (raw) {
+          const data = JSON.parse(raw); // 2D array
+          const table = document.createElement("table");
 
-            branches.forEach(branch => {
-                // Changed key format to match create.html
-                let timetable = JSON.parse(localStorage.getItem(`${branch}_timetable`)) || [];
-                
-                let tableHTML = `
-                    <div class="container">
-                        <h2>${branch} Timetable</h2>
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Time Slot</th>
-                                    <th>Teacher</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                `;
-
-                if (timetable.length === 0) {
-                    tableHTML += `<tr><td colspan="2">No lectures scheduled yet.</td></tr>`;
-                } else {
-                    timetable.forEach(lecture => {
-                        tableHTML += `<tr>
-                            <td>${lecture.time}</td>
-                            <td>${lecture.teacher}</td>
-                        </tr>`;
-                    });
-                }
-
-                tableHTML += `
-                            </tbody>
-                        </table>
-                    </div>
-                `;
-
-                timetablesContainer.innerHTML += tableHTML;
+          data.forEach((row, rowIndex) => {
+            const tr = document.createElement("tr");
+            row.forEach((cell) => {
+              const td = document.createElement(rowIndex === 0 ? "th" : "td");
+              td.textContent = cell || "";
+              tr.appendChild(td);
             });
+            table.appendChild(tr);
+          });
+
+          card.appendChild(table);
+        } else {
+          const noData = document.createElement("p");
+          noData.className = "no-data";
+          noData.textContent = "No timetable uploaded yet.";
+          card.appendChild(noData);
         }
 
-        loadTimetables();
-    </script>
-
+        container.appendChild(card);
+      });
+    };
+  </script>
 </body>
 </html>
